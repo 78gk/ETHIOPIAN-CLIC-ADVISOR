@@ -1,0 +1,43 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model HealthPost {
+  id          String   @id @default(cuid())
+  name        String
+  nameAmharic String
+  address     String
+  addressAmharic String
+  phone       String
+  latitude    Float
+  longitude   Float
+  city        String
+  region      String
+  operatingHours String
+  services    String   // JSON array of services
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model TriageLog {
+  id        String   @id @default(cuid())
+  symptoms  String   // JSON array of selected symptoms
+  urgency   String   // low, medium, high, emergency
+  recommendedHealthPostId String?
+  userLocation String? // JSON with lat/lng
+  createdAt DateTime @default(now())
+  
+  @@map("triage_logs")
+}
